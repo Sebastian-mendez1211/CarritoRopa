@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrito de Ropa</title>
+  <style>
+   
+  </style>
+</head>
+<body>
+
+  <h1>Carrito de Ropa</h1>
+
+  <div id="productos">
+    <!-- Productos de la tienda-->
+    <div class="producto">
+      <span>Camiseta   10$</span>
+      <button onclick="agregarProducto(10)">Agregar al carrito</button>
+    </div>
+    <div class="producto">
+      <span>pantalon  30$</span>
+      <button onclick="agregarProducto(30)">Agregar al carrito</button>
+    </div>
+    <div class="producto">
+        <span>pantaloneta  20$</span>
+        <button onclick="agregarProducto(20)">Agregar al carrito</button>
+    </div>
+    <div class="producto">
+        <span>camisa  40$</span>
+        <button onclick="agregarProducto(40)">Agregar al carrito</button>
+      </div>
+    <div class="producto">
+        <span>Ropa interior  20$</span>
+        <button onclick="agregarProducto(20)">Agregar al carrito</button>
+      </div>
+
+  </div>
+
+  <h2>Total: $<span id="total">0</span></h2>
+
+  <button onclick="terminarCompra()">Terminar Compra</button>
+
+  <script src="./js/index.js"></script>
+
+</body>
+</html>
