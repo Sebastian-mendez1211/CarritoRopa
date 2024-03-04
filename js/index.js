@@ -1,3 +1,8 @@
+
+function productosAJSON(productos) {
+  return JSON.stringify(productos);
+}
+
 const PRODUCTOS = [
   {
     nombre: "camiseta",
@@ -30,12 +35,36 @@ const contadorPrendas = {
   medias: 0
 };
 
+
+function guardarDatosEnLocalStorage() {
+  localStorage.setItem('total', total);
+  localStorage.setItem('contadorPrendas', JSON.stringify(contadorPrendas));
+  localStorage.setItem('productos', productosAJSON(PRODUCTOS));
+}
+
+
+function cargarDatosDesdeLocalStorage() {
+  total = parseInt(localStorage.getItem('total')) || 0;
+  const prendasGuardadas = JSON.parse(localStorage.getItem('contadorPrendas')) || {};
+  for (const prenda in prendasGuardadas) {
+    contadorPrendas[prenda] = prendasGuardadas[prenda];
+    actualizarContador(prenda);
+  }
+  actualizarTotal();
+}
+
+
+window.addEventListener('load', () => {
+  cargarDatosDesdeLocalStorage();
+});
+
 function agregarProducto(nombrePrenda) {
   const producto = PRODUCTOS.find(producto => producto.nombre === nombrePrenda);
   total += producto.precio;
   actualizarTotal();
   contadorPrendas[nombrePrenda]++;
   actualizarContador(nombrePrenda);
+  guardarDatosEnLocalStorage(); 
 }
 
 function actualizarTotal() {
@@ -55,6 +84,7 @@ function reiniciarCompra() {
     actualizarContador(prenda);
   }
   actualizarTotal();
+  localStorage.clear(); // 
 }
 
 const productos = document.querySelectorAll("#productos li");
@@ -64,8 +94,6 @@ productos.forEach(producto => {
     agregarProducto(nombrePrenda);
   });
 });
-
-
 
 const finalizarCompraButton = document.getElementById("finalizar-compra");
 finalizarCompraButton.addEventListener("click", () => {
@@ -77,12 +105,3 @@ finalizarCompraButton.addEventListener("click", () => {
   reiniciarCompra();
 });
 
-const buscarPrendaButton = document.getElementById("buscar-prenda");
-buscarPrendaButton.addEventListener("click", () => {
-  const inputPrenda = document.getElementById("input-prenda");
-  const nombrePrenda = inputPrenda.value.toLowerCase(); 
-  const encontrada = PRODUCTOS.some(producto => producto.nombre === nombrePrenda);
-  console.log("Prenda disponible: " + encontrada);
-});
-
-    
