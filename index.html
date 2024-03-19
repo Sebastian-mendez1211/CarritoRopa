@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrito de Compras</title>
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <h1>Carrito de Compras</h1>
+
+  
+  <ul id="productos">
+    <li id="camiseta">
+      <img src="./img/camiseta.jpeg" alt="Camiseta">
+      Camiseta <span id="contador-camiseta">0</span>
+      <button class="mas">+</button>
+      <button class="menos">-</button>
+    </li>
+    <li id="camisa">
+      <img src="./img/camisa.jpeg" alt="Camisa">
+      Camisa <span id="contador-camisa">0</span>
+      <button class="mas">+</button>
+      <button class="menos">-</button>
+    </li>
+    <li id="pantalon">
+      <img src="./img/pantalon.jpeg" alt="Pantalón">
+      Pantalón <span id="contador-pantalon">0</span>
+      <button class="mas">+</button>
+      <button class="menos">-</button>
+    </li>
+    <li id="pantaloneta">
+      <img src="./img/pantaloneta.jpeg" alt="Pantalóneta">
+      Pantalóneta <span id="contador-pantaloneta">0</span>
+      <button class="mas">+</button>
+      <button class="menos">-</button>
+    </li>
+    <li id="medias">
+      <img src="./img/medias.jpeg" alt="Medias">
+      Medias <span id="contador-medias">0</span>
+      <button class="mas">+</button>
+      <button class="menos">-</button>
+    </li>
+  </ul>
+  <p>Total: $<span id="total">0</span></p>
+
+  <button id="finalizar-compra">Finalizar compra</button>
+  <br><br>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script src="./js/index.js"></script>
+
+</body>
+</html>
