@@ -1,3 +1,34 @@
+<<<<<<< HEAD
+=======
+
+function productosAJSON(productos) {
+  return JSON.stringify(productos);
+}
+
+const PRODUCTOS = [
+  {
+    nombre: "camiseta",
+    precio: 35
+  },
+  {
+    nombre: "camisa",
+    precio: 30
+  },
+  {
+    nombre: "pantalon",
+    precio: 40
+  },
+  {
+    nombre: "pantaloneta",
+    precio: 20
+  },
+  {
+    nombre: "medias",
+    precio: 15
+  }
+];
+
+>>>>>>> 61f526ab83e0e31dff01005a4a03d0e9c95427d1
 let total = 0;
 const contadorPrendas = {
   camiseta: 0,
@@ -7,6 +38,7 @@ const contadorPrendas = {
   medias: 0
 };
 
+<<<<<<< HEAD
 async function cargarDatosDesdeLocalStorage() {
     try {
         await cargarDatosDesdeJSON();
@@ -71,6 +103,38 @@ async function quitarProducto(nombrePrenda) {
     } catch (error) {
         console.error('Error al quitar producto:', error);
     }
+=======
+
+function guardarDatosEnLocalStorage() {
+  localStorage.setItem('total', total);
+  localStorage.setItem('contadorPrendas', JSON.stringify(contadorPrendas));
+  localStorage.setItem('productos', productosAJSON(PRODUCTOS));
+}
+
+
+function cargarDatosDesdeLocalStorage() {
+  total = parseInt(localStorage.getItem('total')) || 0;
+  const prendasGuardadas = JSON.parse(localStorage.getItem('contadorPrendas')) || {};
+  for (const prenda in prendasGuardadas) {
+    contadorPrendas[prenda] = prendasGuardadas[prenda];
+    actualizarContador(prenda);
+  }
+  actualizarTotal();
+}
+
+
+window.addEventListener('load', () => {
+  cargarDatosDesdeLocalStorage();
+});
+
+function agregarProducto(nombrePrenda) {
+  const producto = PRODUCTOS.find(producto => producto.nombre === nombrePrenda);
+  total += producto.precio;
+  actualizarTotal();
+  contadorPrendas[nombrePrenda]++;
+  actualizarContador(nombrePrenda);
+  guardarDatosEnLocalStorage(); 
+>>>>>>> 61f526ab83e0e31dff01005a4a03d0e9c95427d1
 }
 
 function actualizarTotal() {
@@ -90,6 +154,7 @@ function reiniciarCompra() {
     actualizarContador(prenda);
   }
   actualizarTotal();
+<<<<<<< HEAD
 
 }
 
@@ -111,6 +176,17 @@ productos.forEach(producto => {
   menosButton.addEventListener("click", () => {
     quitarProducto(nombrePrenda);
   });
+=======
+  localStorage.clear(); // 
+}
+
+const productos = document.querySelectorAll("#productos li");
+productos.forEach(producto => {
+  producto.addEventListener("click", () => {
+    const nombrePrenda = producto.id;
+    agregarProducto(nombrePrenda);
+  });
+>>>>>>> 61f526ab83e0e31dff01005a4a03d0e9c95427d1
 });
 
 const finalizarCompraButton = document.getElementById("finalizar-compra");
@@ -123,6 +199,7 @@ finalizarCompraButton.addEventListener("click", () => {
   reiniciarCompra();
 });
 
+<<<<<<< HEAD
 const btnUno = document.getElementById('finalizar-compra');
 
  btnUno.addEventListener('click', ()=>{
@@ -137,3 +214,5 @@ const btnUno = document.getElementById('finalizar-compra');
 
     })
   })
+=======
+>>>>>>> 61f526ab83e0e31dff01005a4a03d0e9c95427d1

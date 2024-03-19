@@ -8,7 +8,11 @@
 
 
 #productos li {
+<<<<<<< HEAD
   width:190px; 
+=======
+  width: 200px; 
+>>>>>>> 61f526ab83e0e31dff01005a4a03d0e9c95427d1
   margin: 10px;
   padding: 10px;
   border: 1px solid #ccc;
