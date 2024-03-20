@@ -1,31 +1,3 @@
-
-function productosAJSON(productos) {
-  return JSON.stringify(productos);
-}
-
-const PRODUCTOS = [
-  {
-    nombre: "camiseta",
-    precio: 35
-  },
-  {
-    nombre: "camisa",
-    precio: 30
-  },
-  {
-    nombre: "pantalon",
-    precio: 40
-  },
-  {
-    nombre: "pantaloneta",
-    precio: 20
-  },
-  {
-    nombre: "medias",
-    precio: 15
-  }
-];
-
 let total = 0;
 const contadorPrendas = {
   camiseta: 0,
@@ -35,36 +7,70 @@ const contadorPrendas = {
   medias: 0
 };
 
+async function cargarDatosDesdeLocalStorage() {
+    try {
+        await cargarDatosDesdeJSON();
+        total = parseInt(localStorage.getItem('total')) || 0;
+        const prendasGuardadas = JSON.parse(localStorage.getItem('contadorPrendas')) || {};
+        for (const prenda in prendasGuardadas) {
+            contadorPrendas[prenda] = prendasGuardadas[prenda];
+            actualizarContador(prenda);
+        }
+        actualizarTotal();
+    } catch (error) {
+        console.error('Error al cargar datos desde el almacenamiento local:', error);
+    }
+}
 
 function guardarDatosEnLocalStorage() {
-  localStorage.setItem('total', total);
-  localStorage.setItem('contadorPrendas', JSON.stringify(contadorPrendas));
-  localStorage.setItem('productos', productosAJSON(PRODUCTOS));
+    localStorage.setItem('total', total);
+    localStorage.setItem('contadorPrendas', JSON.stringify(contadorPrendas));
 }
 
-
-function cargarDatosDesdeLocalStorage() {
-  total = parseInt(localStorage.getItem('total')) || 0;
-  const prendasGuardadas = JSON.parse(localStorage.getItem('contadorPrendas')) || {};
-  for (const prenda in prendasGuardadas) {
-    contadorPrendas[prenda] = prendasGuardadas[prenda];
-    actualizarContador(prenda);
-  }
-  actualizarTotal();
+async function cargarDatosDesdeJSON() {
+    try {
+        const respuesta = await fetch('productos.json');
+        const productosJSON = await respuesta.json();
+        localStorage.setItem('productos', JSON.stringify(productosJSON));
+    } catch (error) {
+        console.error('Error al cargar datos desde el archivo JSON:', error);
+    }
 }
 
+async function agregarProducto(nombrePrenda) {
+    try {
+        const productosJSON = JSON.parse(localStorage.getItem('productos')) || [];
+        const producto = productosJSON.find(producto => producto.nombre === nombrePrenda);
+        if (producto) {
+            total += producto.precio;
+            actualizarTotal();
+            contadorPrendas[nombrePrenda]++;
+            actualizarContador(nombrePrenda);
+            guardarDatosEnLocalStorage();
+        } else {
+            console.error('El producto no se encontró en el archivo JSON.');
+        }
+    } catch (error) {
+        console.error('Error al agregar producto:', error);
+    }
+}
 
-window.addEventListener('load', () => {
-  cargarDatosDesdeLocalStorage();
-});
-
-function agregarProducto(nombrePrenda) {
-  const producto = PRODUCTOS.find(producto => producto.nombre === nombrePrenda);
-  total += producto.precio;
-  actualizarTotal();
-  contadorPrendas[nombrePrenda]++;
-  actualizarContador(nombrePrenda);
-  guardarDatosEnLocalStorage(); 
+async function quitarProducto(nombrePrenda) {
+    try {
+        const productosJSON = JSON.parse(localStorage.getItem('productos')) || [];
+        const producto = productosJSON.find(producto => producto.nombre === nombrePrenda);
+        if (producto && contadorPrendas[nombrePrenda] > 0) {
+            total -= producto.precio;
+            contadorPrendas[nombrePrenda]--;
+            actualizarTotal();
+            actualizarContador(nombrePrenda);
+            guardarDatosEnLocalStorage(); 
+        } else {
+            console.error('El producto no se encontró en el archivo JSON o no hay existencias.');
+        }
+    } catch (error) {
+        console.error('Error al quitar producto:', error);
+    }
 }
 
 function actualizarTotal() {
@@ -84,14 +90,26 @@ function reiniciarCompra() {
     actualizarContador(prenda);
   }
   actualizarTotal();
-  localStorage.clear(); // 
+
 }
+
+
+window.addEventListener('load', () => {
+  cargarDatosDesdeLocalStorage();
+});
 
 const productos = document.querySelectorAll("#productos li");
 productos.forEach(producto => {
-  producto.addEventListener("click", () => {
-    const nombrePrenda = producto.id;
+  const nombrePrenda = producto.id;
+  const masButton = producto.querySelector(".mas");
+  const menosButton = producto.querySelector(".menos");
+
+  masButton.addEventListener("click", () => {
     agregarProducto(nombrePrenda);
+  });
+
+  menosButton.addEventListener("click", () => {
+    quitarProducto(nombrePrenda);
   });
 });
 
@@ -105,3 +123,17 @@ finalizarCompraButton.addEventListener("click", () => {
   reiniciarCompra();
 });
 
+const btnUno = document.getElementById('finalizar-compra');
+
+ btnUno.addEventListener('click', ()=>{
+    Swal.fire({
+        title: "Compra finalizada",
+        
+        text: "Muchas gracias por comprar con nosotros.",
+
+        imageUrl: "./img/lista-de-verificacion.png",
+        confirmButtonText:"aceptar"
+
+
+    })
+  })
